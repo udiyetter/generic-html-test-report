@@ -13,15 +13,14 @@
     <script type="text/javascript" language="javascript" src="js/jquery.dataTables.js"></script>
     <script type="text/javascript" language="javascript" src="js/Chart.js"></script>
     <script type="text/javascript" charset="utf-8">
-        $(document).ready(function () {
+        function createTable() {
             $('#overview').dataTable({
                 "bJQueryUI": true,
                 "sPaginationType": "full_numbers"
             });
-        });
-    </script>
-    <script type="text/javascript" charset="utf-8">
-        $(document).ready(function () {
+		}
+		
+		function createDougnut() {
             oTable = $('#overview').dataTable();
             var allData = oTable.fnGetData();
             var success = 0;
@@ -68,8 +67,64 @@
             data[4] = new Object();
             data[4].value = error;
             data[4].color = "#FF5050";
-            new Chart(document.getElementById("canvas").getContext("2d")).Doughnut(data);
-        });
+            new Chart(document.getElementById("doughnut").getContext("2d")).Doughnut(data);
+        }
+
+        function createBar() {
+			/**
+			oTable = $('#overview').dataTable();
+            var allData = oTable.fnGetData();
+            var success = 0;
+            var failure = 0;
+
+            allData.forEach(function (element, index) {
+                //TODO: Find the status by header name
+                var status = element[5];
+                switch (status) {
+                case "Success":
+                    success++;
+                    break;
+                case "Failure":
+                    failure++;
+                    break;
+                case "In Progress":
+                    inProgress++;
+                    break;
+                case "Error":
+                    error++;
+                    break;
+                case "Warning":
+                    warning++;
+                    break;
+                }
+
+            });
+		*/
+		
+            var barChartData = {
+                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                datasets: [{
+                    fillColor: "rgba(220,220,220,0.5)",
+                    strokeColor: "rgba(220,220,220,1)",
+                    data: [65, 59, 90, 81, 56, 55, 40]
+                }, {
+                    fillColor: "rgba(151,187,205,0.5)",
+                    strokeColor: "rgba(151,187,205,1)",
+                    data: [28, 48, 40, 19, 96, 27, 100]
+                }]
+
+            }
+
+            new Chart(document.getElementById("bar").getContext("2d")).Bar(barChartData);
+
+        }
+
+
+        $(document).ready(function () {
+                createTable();
+				createDougnut();
+                createBar();
+		});
     </script>
 </head>
 
@@ -408,12 +463,19 @@
                     </tr>
                 </tbody>
             </table>
-
-
         </div>
         <div id="dashboard">
             <h2>Dashboard</h2>
-            <canvas id="canvas" height="450" width="450" />
+            <div style="float:right">
+                <canvas id="doughnut" height="450" width="450" />
+            </div>
+            <div style="float:left">
+                <canvas id="bar" height="450" width="450" />
+            </div>
         </div>
+
+    </div>
+
 </body>
+
 </html>
